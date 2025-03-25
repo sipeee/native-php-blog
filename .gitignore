@@ -1,0 +1,10 @@
+
+###> app ###
+/.idea
+/__
+/.env.local
+/.env.local.php
+/.env.*.local
+/var/
+/vendor/
+###< app ###
