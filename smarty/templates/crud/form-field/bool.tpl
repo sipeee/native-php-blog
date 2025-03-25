@@ -1,0 +1,1 @@
+<input type="checkbox" name="form[{$name}]" {if $value}checked="checked"{/if} />

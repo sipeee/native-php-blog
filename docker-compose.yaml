@@ -1,0 +1,37 @@
+services:
+    blog-web:
+        container_name: 'blog-web'
+        build: .
+        ports:
+            - '80${PROJECT_NUMBER}:80'
+        env_file: '.env'
+        depends_on:
+            - 'blog-db'
+        links:
+            - 'blog-db'
+        volumes:
+            - 'blog-project-volume:/var/www'
+
+    blog-db:
+        container_name: 'blog-db'
+        image: 'mysql:latest'
+        ports:
+            - '33${PROJECT_NUMBER}:${MYSQL_PORT}'
+        env_file: '.env'
+        volumes:
+            - 'blog-database-volume:/var/lib/mysql'
+
+    blog-sftp:
+        container_name: 'blog-sftp'
+        image: 'atmoz/sftp:latest'
+        ports:
+            - '22${PROJECT_NUMBER}:22'
+        volumes:
+            - 'blog-project-volume:/home/user'
+        command: user:pass
+
+volumes:
+    blog-database-volume:
+        name: 'blog-database-volume'
+    blog-project-volume:
+        name: 'blog-project-volume'

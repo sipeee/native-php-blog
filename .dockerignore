@@ -1,0 +1,6 @@
+###> app ###
+/__
+/smarty/cache
+/smarty/templates_c
+/vendor
+###< app ###
