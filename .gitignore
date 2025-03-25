@@ -1,10 +1,12 @@
 
 ###> app ###
 /.idea
+
 /__
 /.env.local
 /.env.local.php
 /.env.*.local
-/var/
+/smarty/cache
+/smarty/templates_c
 /vendor/
 ###< app ###
