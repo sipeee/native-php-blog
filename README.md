@@ -8,7 +8,10 @@ A projekt környezetét fejlesztéshez legegyszerűbben a docker compose elindí
 
 Ekkor a demo site az alábbi URL-en lesz elérhető lokálisan:
 
-http://127.0.0.1:8014/
+- http://127.0.0.1:8014/
+- http://127.0.0.1:8014/login.php # crud-os belépés
+
+Belépéshez a felhasználónév és jelszó migrációt követően: sipiszoty@gmail.com/password
 
 Az adatbázis migrálásához be kell lépnünk a konténerbe és futtatnunk kell a migrációt:
 
