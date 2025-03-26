@@ -41,8 +41,6 @@ SQL
         $connection
             ->prepare('INSERT INTO users (email, password, is_active) VALUES (?, ?, ?)')
             ->execute(['sipiszoty@gmail.com', $password, true]);
-
-        echo $password;
     }
 
     /**
