@@ -37,4 +37,4 @@ RUN mkdir -p smarty/templates && \
     chmod 777 smarty/templates_c && \
     rm -R .etc
 
-CMD ["phpmig", "migrate"]
+# CMD ["phpmig", "migrate"]
