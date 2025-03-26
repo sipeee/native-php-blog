@@ -9,8 +9,8 @@ services:
             - 'blog-db'
         links:
             - 'blog-db'
-        volumes:
-            - 'blog-project-volume:/var/www'
+#        volumes:
+#            - 'blog-project-volume:/var/www'
 
     blog-db:
         container_name: 'blog-db'
@@ -21,17 +21,17 @@ services:
         volumes:
             - 'blog-database-volume:/var/lib/mysql'
 
-    blog-sftp:
-        container_name: 'blog-sftp'
-        image: 'atmoz/sftp:latest'
-        ports:
-            - '22${PROJECT_NUMBER}:22'
-        volumes:
-            - 'blog-project-volume:/home/user'
-        command: user:pass
+#    blog-sftp:
+#        container_name: 'blog-sftp'
+#        image: 'atmoz/sftp:latest'
+#        ports:
+#            - '22${PROJECT_NUMBER}:22'
+#        volumes:
+#            - 'blog-project-volume:/home/user'
+#        command: user:pass
 
 volumes:
     blog-database-volume:
         name: 'blog-database-volume'
-    blog-project-volume:
-        name: 'blog-project-volume'
+#    blog-project-volume:
+#        name: 'blog-project-volume'
