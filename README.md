@@ -10,6 +10,12 @@ Ekkor a demo site az alábbi URL-en lesz elérhető lokálisan:
 
 http://127.0.0.1:8014/
 
+Az adatbázis migrálásához be kell lépnünk a konténerbe és futtatnunk kell a migrációt:
+
+> docker exec -ti blog-web bash
+> 
+> phpmig migrate
+
 Ha szeretnénk tesztadatokat a próbálgatásokhoz, akkor azt az alább tudjuk megtenni:
 
 > mysql -h 127.0.0.1 -p 3314 -u blog_user -p blog_password < /var/www/migrations/dump-test-data.sql
