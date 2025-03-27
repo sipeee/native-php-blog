@@ -28,5 +28,5 @@ Ha szeretnénk tesztadatokat a próbálgatásokhoz, akkor azt az alább tudjuk m
 Amivel még nem lettem kész (és persze látom, hogy jó lenne):
 - A crud formok validálása. Jelenleg kliensoldali validátorokkal láttam csak el a formot, de szerveroldalon is biztosítani kellene az adatok ellenőrzését, mielőtt azt elmentenénk. (Én ezt amúgy a symfony/validator komponenssel gondoltam megcsinálni.)
 - Az előbbivel összhanban ezzel kapcsolatosan a form mezőkre hibaüzeneteket is lehetne kitenni.
-- Kellene egy reach text editor a post-ok szerkesztéséhez
+- Kellene egy rich text editor a post-ok szerkesztéséhez
 - A környezetek kialakítása elmaradt, most dev környezetben van a composer autoload-ja.
