@@ -18,6 +18,10 @@ if (empty($id) || !is_string($id) || !ctype_digit($id)) {
 
 $post = $repository->queryPublishedPostById($id);
 
+if (empty($post)) {
+    ResponseUtility::redirectToAndExit('/');
+}
+
 SmartyRenderer::getInstance()->render('show.tpl', [
     'post' => $post,
 ]);
