@@ -15,7 +15,7 @@ class Repository
         return $statement->fetchAll(\PDO::FETCH_ASSOC);
     }
 
-    public function queryPublishedPostById(int $id): array
+    public function queryPublishedPostById(int $id): ?array
     {
         $now = new \DateTime();
         $connection = ConnectionProvider::getInstance()->getConnection();
