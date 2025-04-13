@@ -55,7 +55,7 @@ class PostCrudConfiguration extends AbstractCrudConfiguration
             new FormField('title', 'Title', 'text', [
                 'required' => true,
             ]),
-            new FormField('content', 'Content', 'tinymce'),
+            new FormField('content', 'Content', 'richtext'),
             new FormField('publish_at', 'Publish at', 'datetime',  [
                 'required' => true,
             ]),
