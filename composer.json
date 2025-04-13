@@ -13,6 +13,7 @@
     "davedevelopment/phpmig": "^1.7",
     "smarty/smarty": "^5.4",
     "symfony/http-foundation": "^7.2",
+    "symfony/validator": "^7.2",
     "vlucas/phpdotenv": "^5.6"
   }
 }
