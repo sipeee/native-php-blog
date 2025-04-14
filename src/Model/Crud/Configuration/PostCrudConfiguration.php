@@ -2,10 +2,10 @@
 
 namespace App\Model\Crud\Configuration;
 
-use App\Model\BcryptEncoder;
 use App\Model\Crud\Field\FormField;
 use App\Model\Crud\Field\ListField;
 use App\Model\Repository;
+use Symfony\Component\Validator\Constraints as Assert;
 
 class PostCrudConfiguration extends AbstractCrudConfiguration
 {
@@ -43,40 +43,11 @@ class PostCrudConfiguration extends AbstractCrudConfiguration
         return $this->getEditOrCreateFields();
     }
 
-    public function getEditOrCreateFields(): array
-    {
-        $repo = new Repository();
-
-        return [
-            new FormField('user_id', 'User', 'choice', [
-                'required' => true,
-                'options' => $repo->queryUserChoiceOptions(),
-            ]),
-            new FormField('title', 'Title', 'text', [
-                'required' => true,
-            ]),
-            new FormField('content', 'Content', 'richtext'),
-            new FormField('publish_at', 'Publish at', 'datetime',  [
-                'required' => true,
-            ]),
-        ];
-    }
-
-    public function modifyInitialEditFormData(array $formData): array
-    {
-        return $formData;
-    }
-
     public function modifySubmittedUpdateFormData(array $formData): array
     {
         $now = new \DateTime();
         $formData['update_at'] = $now->format(self::DATE_FORMAT);
 
-        return $formData;
-    }
-
-    public function modifyInitialNewFormData(array $formData): array
-    {
         return $formData;
     }
 
@@ -87,5 +58,59 @@ class PostCrudConfiguration extends AbstractCrudConfiguration
         $formData['update_at'] = $now->format(self::DATE_FORMAT);
 
         return $formData;
+    }
+
+    private function getEditOrCreateFields(): array
+    {
+        $repo = new Repository();
+
+        $userChoiceOptions = $repo->queryUserChoiceOptions();
+
+        return [
+            new FormField(
+                name: 'user_id',
+                label: 'User',
+                type: 'choice',
+                parameters: [
+                    'required' => true,
+                    'options' => $userChoiceOptions,
+                ],
+                constraints: [
+                    new Assert\NotBlank(),
+                    new Assert\Choice(
+                        choices: array_map('strval', array_keys($userChoiceOptions)),
+                    ),
+                ],
+            ),
+            new FormField(
+                name: 'title',
+                label: 'Title',
+                type: 'text',
+                parameters: [
+                    'required' => true,
+                ],
+                constraints: [
+                    new Assert\NotBlank(),
+                    new Assert\Length(['min' => 3]),
+                ],
+            ),
+            new FormField(
+                name: 'content',
+                label: 'Content',
+                type: 'richtext',
+            ),
+            new FormField(
+                name: 'publish_at',
+                label: 'Publish at',
+                type: 'datetime',
+                parameters: [
+                    'required' => true,
+                ],
+                constraints: [
+                    new Assert\NotBlank(),
+                    new Assert\DateTime('Y-m-d\\TH:i'),
+                ],
+            ),
+        ];
     }
 }

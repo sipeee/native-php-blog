@@ -5,6 +5,8 @@ namespace App\Model\Crud\Configuration;
 use App\Model\BcryptEncoder;
 use App\Model\Crud\Field\FormField;
 use App\Model\Crud\Field\ListField;
+use App\Utility\BoolUtility;
+use Symfony\Component\Validator\Constraints as Assert;
 
 class UserCrudConfiguration extends AbstractCrudConfiguration
 {
@@ -32,19 +34,6 @@ class UserCrudConfiguration extends AbstractCrudConfiguration
         return $this->getEditOrCreateFields(true);
     }
 
-    public function getEditOrCreateFields(bool $isCreate): array
-    {
-        return [
-            new FormField('email', 'Email', 'email', [
-                'required' => true,
-            ]),
-            new FormField('is_active', 'Is active?', 'bool'),
-            new FormField('password', 'Password', 'password', [
-                'required' => $isCreate,
-            ]),
-        ];
-    }
-
     public function modifyInitialEditFormData(array $formData): array
     {
         if (isset($formData['password']) && 0 < mb_strlen($formData['password'])) {
@@ -52,7 +41,7 @@ class UserCrudConfiguration extends AbstractCrudConfiguration
         }
 
         $formData['is_active'] = $formData['is_active'] ?? 0;
-        $formData['is_active'] = in_array($formData['is_active'], [1, true, 'on', 'true', '1'], true) ? 1 : 0;
+        $formData['is_active'] = BoolUtility::isTrueRequestParameter($formData['is_active']) ? 1 : 0;
 
         return $formData;
     }
@@ -67,8 +56,50 @@ class UserCrudConfiguration extends AbstractCrudConfiguration
         }
 
         $formData['is_active'] = $formData['is_active'] ?? 0;
-        $formData['is_active'] = in_array($formData['is_active'], [1, true, 'on', 'true', '1'], true) ? 1 : 0;
+        $formData['is_active'] = BoolUtility::isTrueRequestParameter($formData['is_active']) ? 1 : 0;
 
         return $formData;
+    }
+
+    private function getEditOrCreateFields(bool $isCreate): array
+    {
+        $passwordConstraints = [
+            new Assert\Length(min: 6),
+        ];
+        if ($isCreate) {
+            $passwordConstraints[] = new Assert\NotBlank();
+        }
+
+        return [
+            new FormField(
+                name: 'email',
+                label: 'Email',
+                type: 'email',
+                parameters: [
+                    'required' => true,
+                ],
+                constraints: [
+                    new Assert\NotBlank(),
+                    new Assert\Email(),
+                ],
+            ),
+            new FormField(
+                name: 'is_active',
+                label: 'Is active?',
+                type: 'bool',
+                constraints: [
+                    new Assert\Choice(BoolUtility::trueRequestParameters()),
+                ],
+            ),
+            new FormField(
+                name: 'password',
+                label: 'Password',
+                type: 'password',
+                parameters: [
+                    'required' => $isCreate,
+                ],
+                constraints: $passwordConstraints,
+            ),
+        ];
     }
 }
