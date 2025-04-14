@@ -187,3 +187,9 @@ body {
 .delete .yesno a:hover {
     background-color: #32a367;
 }
+.error-list, .error-list li {
+    display: block;
+    color: #f33;
+    margin: 0;
+    padding: 0;
+}
