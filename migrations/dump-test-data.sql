@@ -1,5 +1,9 @@
+SET FOREIGN_KEY_CHECKS = 0;
+
 TRUNCATE TABLE posts;
 TRUNCATE TABLE users;
+
+SET FOREIGN_KEY_CHECKS = 1;
 
 INSERT INTO blog_db.users (id, email, password, is_active) VALUES (1, 'sipiszoty@gmail.com', '$2y$12$LliRKVsXa0g.2vwUCrTfduLwKH4AsU3c1Gb41N9A4xdp38XzNZP3y', 1);
 INSERT INTO blog_db.users (id, email, password, is_active) VALUES (2, 'sipiszoty2@gmail.com', '$2y$12$RWOLrH0nnsqtjC.jwWpc0Oj0nriIceSFU1jIj3RzHr5.Koo8GShje', 1);
