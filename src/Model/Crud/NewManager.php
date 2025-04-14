@@ -4,6 +4,7 @@ namespace App\Model\Crud;
 
 use App\Model\ConnectionProvider;
 use App\Model\Crud\Configuration\CrudConfigurationInterface;
+use App\Model\Crud\Form\FormValidator;
 use App\Model\RequestStack;
 use App\Model\SmartyRenderer;
 use App\Utility\ResponseUtility;
@@ -25,15 +26,21 @@ class NewManager
         $formData = $configuration->modifyInitialNewFormData($this->createNewRow());
 
         $request = RequestStack::getInstance()->getRequest();
+        $formErrors = [];
         if ($request->isMethod('post') && $request->request->has('form')) {
             $formData = $request->request->all('form');
-            $formData = $configuration->modifySubmittedCreateFormData($formData);
+            $formValidator = new FormValidator($this->configuration, false);
+            $formErrors = $formValidator->getFormErrors($formData);
 
-            $this->saveCreatableRow($formData);
+            if (empty($formErrors)) {
+                $formData = $configuration->modifySubmittedCreateFormData($formData);
 
-            ResponseUtility::redirectToAndExit($request->getBaseUrl().'?'.http_build_query([
-                'action' => ListManager::ACTION,
-            ]));
+                $this->saveCreatableRow($formData);
+
+                ResponseUtility::redirectToAndExit($request->getBaseUrl().'?'.http_build_query([
+                    'action' => ListManager::ACTION,
+                ]));
+            }
         }
 
         SmartyRenderer::getInstance()->render('crud/new.tpl', [
@@ -41,6 +48,7 @@ class NewManager
             'fields' => $this->configuration->getCreateFields(),
             'row' => $formData,
             'request' => $request,
+            'formErrors' => $formErrors,
         ]);
     }
 

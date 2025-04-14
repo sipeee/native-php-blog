@@ -4,6 +4,7 @@ namespace App\Model\Crud;
 
 use App\Model\ConnectionProvider;
 use App\Model\Crud\Configuration\CrudConfigurationInterface;
+use App\Model\Crud\Form\FormValidator;
 use App\Model\RequestStack;
 use App\Model\SmartyRenderer;
 use App\Utility\ResponseUtility;
@@ -35,14 +36,21 @@ class EditManager
         }
 
         $formData = $configuration->modifyInitialEditFormData($formData);
+        $formErrors = [];
         if ($request->isMethod('post') && $request->request->has('form')) {
             $formData = $request->request->all('form');
-            $formData = $configuration->modifySubmittedUpdateFormData($formData);
-            $this->saveUpdatableRow($id, $formData);
+            $formValidator = new FormValidator($this->configuration, true);
+            $formErrors = $formValidator->getFormErrors($formData);
 
-            ResponseUtility::redirectToAndExit($request->getBaseUrl().'?'.http_build_query([
-                'action' => ListManager::ACTION,
-            ]));
+            if (empty($formErrors)) {
+                $formData = $configuration->modifySubmittedUpdateFormData($formData);
+
+                $this->saveUpdatableRow($id, $formData);
+
+                ResponseUtility::redirectToAndExit($request->getBaseUrl().'?'.http_build_query([
+                    'action' => ListManager::ACTION,
+                ]));
+            }
         }
 
         SmartyRenderer::getInstance()->render('crud/edit.tpl', [
@@ -51,6 +59,7 @@ class EditManager
             'id' => $id,
             'row' => $formData,
             'request' => $request,
+            'formErrors' => $formErrors,
         ]);
     }
 
